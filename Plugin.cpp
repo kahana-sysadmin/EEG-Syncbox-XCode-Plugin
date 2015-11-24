@@ -6,6 +6,7 @@
 #include "u3Extended.h"
 #include <cstdlib> //for random()
 #include <unistd.h> //for usleep(microseconds)
+#include <pthread.h>
 
 //labjackusb
 extern "C" float LJUSB_GetLibraryVersion();
@@ -28,6 +29,7 @@ int syncChannel = 0;
 //random seed must be set once during the duration of the program
 //random is used in sync pulse for time jitter
 bool isRandomSeedSet = false;
+float syncTimeBeforePulseSeconds = 0.0f;
 
 
 const char* PrintHello(){
@@ -100,9 +102,19 @@ const char* TurnLEDOff(){
     return "No device to turn off LED.";
 }
 
+//THREADED sync pulse. used because USLEEP is called in ExecuteSyncPulse. don't want the whole app to sleep.
+float SyncPulse(){
+    
+    pthread_t t1 ; // declare 2 threads.
+    pthread_create( &t1, NULL, ExecuteSyncPulse,NULL); // create a thread running function1
+
+    
+    return syncTimeBeforePulseSeconds;
+}
 
 //ex: a 10 ms pulse every second — until the duration is over...
-float SyncPulse(){
+//should be called from SYNCPULSE() function on its own thread so that when it calls USLEEP, it will not sleep the entire application.
+void * ExecuteSyncPulse(void * argument){
     if(!isRandomSeedSet){
         //set random seed
         srand (static_cast <unsigned> (time(0)));
@@ -112,13 +124,7 @@ float SyncPulse(){
     //creates a random float between 0.8f and 1.2f
     float minTimeBetweenPulses = 0.8f;
     float maxTimeBetweenPulses = 1.2f;
-    float timeBetweenPulsesSeconds = minTimeBetweenPulses + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(maxTimeBetweenPulses-minTimeBetweenPulses)));
-    
-    
-    
-    
-    
-    
+    float timeBetweenPulseSeconds = minTimeBetweenPulses + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(maxTimeBetweenPulses-minTimeBetweenPulses)));
     
     
     
@@ -128,8 +134,11 @@ float SyncPulse(){
     int pulseTimeMilliseconds = (int)(pulseTimeSeconds*1000);
     float maxTimeToWait = 1.0f - pulseTimeSeconds;
     
-    float timeBeforePulseSeconds = static_cast <float> (rand()) / static_cast <float> (RAND_MAX/maxTimeToWait); //creates a random float between 0.0f and maxTimeToWait
-    unsigned int timeBeforePulseMilliseconds = (int)(timeBeforePulseSeconds*1000);
+
+    //global var to keep track of this/be able to print it from SyncPulse()...
+    syncTimeBeforePulseSeconds = static_cast <float> (rand()) / static_cast <float> (RAND_MAX/maxTimeToWait); //creates a random float between 0.0f and maxTimeToWait
+
+    unsigned int timeBeforePulseMilliseconds = (int)(syncTimeBeforePulseSeconds*1000);
     
     unsigned int microseconds = timeBeforePulseMilliseconds*1000;
     usleep(microseconds); //sleep for the random time to wait before the pulse
@@ -149,15 +158,12 @@ float SyncPulse(){
         toggleHandleLEDOff(hDevice, syncChannel);
     }
     
-    //#include <chrono>
-    // ...
-    //using namespace std::chrono;
-    //long currentTimeMS = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
+
+    //wait for rest of second
+    float remainderOfSecondMilliseconds = 1000 - pulseTimeMilliseconds - timeBeforePulseMilliseconds;
+    usleep(remainderOfSecondMilliseconds * 1000);
     
-    //TODO: wait for rest of second
-    
-    
-    return timeBeforePulseSeconds;
+    //return timeBeforePulseSeconds;
 }
 
 const char* StimPulse(float durationSeconds, float freqHz, bool doRelay){
