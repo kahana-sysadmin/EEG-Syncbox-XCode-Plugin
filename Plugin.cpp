@@ -8,6 +8,8 @@
 #include <unistd.h> //for usleep(microseconds)
 #include <pthread.h>
 
+#include <sys/time.h>
+
 //labjackusb
 extern "C" float LJUSB_GetLibraryVersion();
 
@@ -30,6 +32,7 @@ int syncChannel = 0;
 //random is used in sync pulse for time jitter
 bool isRandomSeedSet = false;
 float syncTimeBeforePulseSeconds = 0.0f;
+long syncOnSystemTime = 0;
 
 
 const char* PrintHello(){
@@ -86,7 +89,7 @@ const char* CloseUSB(){
 
 const char* TurnLEDOn(){
     if(isDeviceOpen){
-        toggleHandleLEDOn(hDevice, stimChannel);
+        toggleHandleLEDOn(hDevice, syncChannel);
         return "Light On!";
     }
     return "No device to turn on LED.";
@@ -96,20 +99,20 @@ const char* TurnLEDOn(){
 
 const char* TurnLEDOff(){
     if(isDeviceOpen){
-        toggleHandleLEDOff(hDevice, stimChannel);
+        toggleHandleLEDOff(hDevice, syncChannel);
         return "Light Off!";
     }
     return "No device to turn off LED.";
 }
 
 //THREADED sync pulse. used because USLEEP is called in ExecuteSyncPulse. don't want the whole app to sleep.
-float SyncPulse(){
+long SyncPulse(){
     
     pthread_t t1 ; // declare 2 threads.
     pthread_create( &t1, NULL, ExecuteSyncPulse,NULL); // create a thread running function1
-
     
-    return syncTimeBeforePulseSeconds;
+    //return syncTimeBeforePulseSeconds;
+    return syncOnSystemTime;
 }
 
 //ex: a 10 ms pulse every second — until the duration is over...
@@ -122,15 +125,15 @@ void * ExecuteSyncPulse(void * argument){
     }
     
     //creates a random float between 0.8f and 1.2f
-    float minTimeBetweenPulses = 0.8f;
+    /*float minTimeBetweenPulses = 0.8f;
     float maxTimeBetweenPulses = 1.2f;
     float timeBetweenPulseSeconds = minTimeBetweenPulses + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(maxTimeBetweenPulses-minTimeBetweenPulses)));
+    */
     
     
     
     
-    
-    float pulseTimeSeconds = 0.5f; //TODO: make this a parameter???   --> 10MS
+    float pulseTimeSeconds = 0.02f; //TODO: make this a parameter???   --> 10MS
     int pulseTimeMilliseconds = (int)(pulseTimeSeconds*1000);
     float maxTimeToWait = 1.0f - pulseTimeSeconds;
     
@@ -146,6 +149,10 @@ void * ExecuteSyncPulse(void * argument){
     
     //turn on pulse
     if(isDeviceOpen){
+        struct timeval tv;
+        gettimeofday(&tv, NULL);
+        
+        syncOnSystemTime = (tv.tv_sec) * 1000 + (tv.tv_usec) / 1000;
         toggleHandleLEDOn(hDevice, syncChannel);
     }
     
