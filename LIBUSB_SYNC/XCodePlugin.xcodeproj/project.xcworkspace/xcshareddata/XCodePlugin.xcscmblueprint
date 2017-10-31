@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "94C5EF325C8B4CE7C9885FD0DAF41322CD7FFCE9",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "94C5EF325C8B4CE7C9885FD0DAF41322CD7FFCE9" : 0,
+    "69608DB8F91D0A32B6D6883E0D896A4178947127" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "B2BC9C8B-01BE-458F-A2B4-673AC2D11BDC",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "94C5EF325C8B4CE7C9885FD0DAF41322CD7FFCE9" : "SyncboxXCodeProject\/",
+    "69608DB8F91D0A32B6D6883E0D896A4178947127" : ""
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "XCodePlugin",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "XCodePlugin.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/conovich\/EEG-Syncbox-Unity-Plugin.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "69608DB8F91D0A32B6D6883E0D896A4178947127"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/conovich\/EEG-Syncbox-XCode-Plugin.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "94C5EF325C8B4CE7C9885FD0DAF41322CD7FFCE9"
+    }
+  ]
+}

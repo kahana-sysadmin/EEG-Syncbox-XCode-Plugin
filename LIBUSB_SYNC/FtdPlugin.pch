@@ -1,0 +1,18 @@
+#include "ftdSyncBox.h"
+
+
+extern "C" {
+    //TEST FUNCTIONS
+    const char* PrintHello ();
+    int PrintANumber ();
+    int AddTwoIntegers(int, int);
+    float AddTwoFloats(float, float);
+
+    //FTD SYNC BOX FUNCTIONS
+    const char* OpenUSB();
+    int CheckUSB();
+    const char* CloseUSB();
+    const char* TurnLEDOn();
+    const char* TurnLEDOff();
+}
+
