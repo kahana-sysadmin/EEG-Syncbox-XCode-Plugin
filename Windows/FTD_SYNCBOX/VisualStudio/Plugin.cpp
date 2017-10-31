@@ -9,7 +9,7 @@
 	This is a simple plugin, a bunch of functions that do simple things.
 */
 
-#include "Plugin.pch"
+//#include "Plugin.pch"
 #include "u3Extended.h"
 #include <cstdlib> //for random()
 //#include <unistd.h> //for usleep(microseconds)
@@ -43,7 +43,22 @@ extern "C"
 
 	// The functions we will call from Unity.
 	//
-	
+	const EXPORT_API char*  PrintHello() {
+		return "PRE U3";
+	}
+
+	int EXPORT_API PrintANumber() {
+		return 5;
+	}
+
+	int EXPORT_API AddTwoIntegers(int a, int b) {
+		return a + b;
+	} 
+
+	float EXPORT_API AddTwoFloats(float a, float b) {
+		return a + b;
+	}
+
 
 	//extern "C" char* OpenUSB();
 	extern "C" HANDLE openUSB(int ID);
@@ -51,7 +66,7 @@ extern "C"
 	extern "C" void sendPulse(HANDLE hDevice, int channel);
 	extern "C" void closeUSB(HANDLE hDevice);
 
-	const char* OpenUSB()
+	const EXPORT_API char* OpenUSB()
 	{
 		int localID;
 	//open first ftd syncbox over USB
@@ -70,7 +85,7 @@ extern "C"
 		}
 	}
 
-	const char* CloseUSB()
+	const EXPORT_API char* CloseUSB()
 	{
 		if (isDeviceOpen)
 		{
@@ -85,7 +100,7 @@ extern "C"
 	
 	}
 
-	int CheckUSB()
+	int EXPORT_API CheckUSB()
 	{
 		if (hDevice != NULL)
 		{
@@ -99,7 +114,7 @@ extern "C"
 
 	}
 
-	const char* TurnLEDOn()
+	const EXPORT_API char* TurnLEDOn()
 	{
 		if (isDeviceOpen)
 		{
@@ -109,7 +124,7 @@ extern "C"
 		return "No device to turn on LED. ";
 	}
 
-	const char* TurnLEDOff()
+	const EXPORT_API char* TurnLEDOff()
 	{
 		if (isDeviceOpen)
 		{
