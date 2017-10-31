@@ -1,0 +1,21 @@
+#include "u3.h"
+#include <windows.h> //includes Sleep
+
+
+extern "C" {
+    //TEST FUNCTIONS
+	const char* PrintHello ();
+	int PrintANumber ();
+	int AddTwoIntegers(int, int);
+	float AddTwoFloats(float, float);
+    
+    //LABJACK FUNCTIONS
+    const char* OpenUSB();
+	int CheckUSB();
+    const char* CloseUSB();
+    const char* TurnLEDOn();
+    const char* TurnLEDOff();
+    long SyncPulse();
+    DWORD WINAPI ExecuteSyncPulse(void * argument);
+    const char* StimPulse(float durationMilliseconds, float freqHz, bool doRelay);
+}
