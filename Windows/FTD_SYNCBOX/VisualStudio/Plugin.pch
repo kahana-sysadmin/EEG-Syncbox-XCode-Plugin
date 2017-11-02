@@ -1,21 +1,44 @@
-#include "u3.h"
-#include <windows.h> //includes Sleep
+#pragma once
+//
+//  u3Extended.h
+//  XCodePlugin
+//
+//  Created by Corey Novich on 4/29/15.
+//
+//
+
+#ifndef __XCodePlugin__u3Extended__
+#define __XCodePlugin__u3Extended__
+
+#include <stdio.h>
+#include "libusb.h"
+
+#define FTD_VENDOR_ID 0x0403
+#define FTD_PRODUCT_ID 0x6001
 
 
+/*new functionality for Unity plugin -- by corey*/
+#ifdef __cplusplus
 extern "C" {
-    //TEST FUNCTIONS
-	const char* PrintHello ();
-	int PrintANumber ();
-	int AddTwoIntegers(int, int);
-	float AddTwoFloats(float, float);
-    
-    //LABJACK FUNCTIONS
-    const char* OpenUSB();
-	int CheckUSB();
-    const char* CloseUSB();
-    const char* TurnLEDOn();
-    const char* TurnLEDOff();
-    long SyncPulse();
-    DWORD WINAPI ExecuteSyncPulse(void * argument);
-    const char* StimPulse(float durationMilliseconds, float freqHz, bool doRelay);
+#endif
+	//const char* OpenUSB();
+	HANDLE openUSB(int ID);
+	void closeUSB(HANDLE hDevice);
+	void sendPulse(HANDLE hDevice, int channel);
+	int returnStatus(HANDLE h, int channel);
+	/*
+	void toggleHandleLEDOn(HANDLE hDevice, int channel);
+	void toggleHandleLEDOff(HANDLE hDevice, int channel);
+	void SetFIOState(HANDLE hDevice, int port, int state);
+	int GetFIOState(HANDLE hDevice, int port);
+	void configIO(HANDLE hDevice, int TimerCounterPinOffset, bool EnableCounter1, bool EnableCounter0, int NumberOfTimersEnabled, int FIOAnalog, int EIOAnalog, bool EnableUART);
+	void configTC(HANDLE hDevice, int TimerCounterPinOffset, int NumberOfTimersEnabled, long *aEnableTimers, long *aEnableCounters, int tc_base , float divisor, long *aTimerModes, double *aTimerValues);
+	*/
+#ifdef __cplusplus
 }
+#endif
+
+
+
+
+#endif /* defined(__XCodePlugin__u3Extended__) */

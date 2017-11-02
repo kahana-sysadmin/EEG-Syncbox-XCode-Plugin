@@ -1,18 +1,11 @@
-﻿  labjackusb.c
-c:\users\jacobslab\documents\simplestpluginexample-4.0\simplestpluginexample\vs2008plugin\visualstudio\libusb.h(30): warning C4005: 'inline': macro redefinition
-  c:\users\jacobslab\documents\simplestpluginexample-4.0\simplestpluginexample\vs2008plugin\visualstudio\cdefs_windows.h(76): note: see previous definition of 'inline'
-labjackusb.c(83): warning C4244: 'function': conversion from 'unsigned long' to 'unsigned char', possible loss of data
-labjackusb.c(85): warning C4244: 'function': conversion from 'unsigned long' to 'unsigned char', possible loss of data
-labjackusb.c(132): warning C4244: 'function': conversion from 'unsigned long' to 'unsigned char', possible loss of data
-labjackusb.c(134): warning C4244: 'function': conversion from 'unsigned long' to 'unsigned char', possible loss of data
-labjackusb.c(180): warning C4244: 'function': conversion from 'unsigned long' to 'unsigned char', possible loss of data
-labjackusb.c(182): warning C4244: 'function': conversion from 'unsigned long' to 'unsigned char', possible loss of data
-labjackusb.c(514): warning C4244: 'function': conversion from '__int64' to 'int', possible loss of data
-labjackusb.c(612): warning C4244: 'function': conversion from '__int64' to 'int', possible loss of data
-labjackusb.c(738): warning C4244: 'function': conversion from 'unsigned long' to 'uint16_t', possible loss of data
-labjackusb.c(1050): warning C4244: 'function': conversion from '__int64' to 'int', possible loss of data
-labjackusb.c(1103): warning C4244: 'function': conversion from '__int64' to 'int', possible loss of data
-labjackusb.c(1279): warning C4244: 'function': conversion from 'unsigned long' to 'uint16_t', possible loss of data
-C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(1189,5): warning MSB8012: TargetPath(C:\Users\JacobsLab\Documents\SimplestPluginExample-4.0\SimplestPluginExample\VS2008Plugin\VisualStudio\x64\Debug\ASimplePlugin.dll) does not match the Linker's OutputFile property value (C:\Users\JacobsLab\Documents\SimplestPluginExample-4.0\SimplestPluginExample\VS2008Plugin\VisualStudio\x64\Debug\UnityTexture.dll). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
-C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(1191,5): warning MSB8012: TargetName(ASimplePlugin) does not match the Linker's OutputFile property value (UnityTexture). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
-  TexturePlugin.vcxproj -> C:\Users\JacobsLab\Documents\SimplestPluginExample-4.0\SimplestPluginExample\VS2008Plugin\VisualStudio\x64\Debug\ASimplePlugin.dll
+﻿  FTD.c
+     Creating library C:\Users\JacobsLab\Downloads\SimplestPluginExample\VS2008Plugin\VisualStudio\x64\Debug\TexturePlugin.lib and object C:\Users\JacobsLab\Downloads\SimplestPluginExample\VS2008Plugin\VisualStudio\x64\Debug\TexturePlugin.exp
+FTD.obj : error LNK2019: unresolved external symbol libusb_init referenced in function openUSB
+FTD.obj : error LNK2019: unresolved external symbol libusb_close referenced in function closeUSB
+FTD.obj : error LNK2019: unresolved external symbol libusb_claim_interface referenced in function openUSB
+FTD.obj : error LNK2019: unresolved external symbol libusb_release_interface referenced in function closeUSB
+FTD.obj : error LNK2019: unresolved external symbol libusb_open_device_with_vid_pid referenced in function openUSB
+FTD.obj : error LNK2019: unresolved external symbol libusb_kernel_driver_active referenced in function openUSB
+FTD.obj : error LNK2019: unresolved external symbol libusb_detach_kernel_driver referenced in function openUSB
+FTD.obj : error LNK2019: unresolved external symbol libusb_bulk_transfer referenced in function sendPulse
+C:\Users\JacobsLab\Downloads\SimplestPluginExample\VS2008Plugin\VisualStudio\x64\Debug\ASimplePlugin.dll : fatal error LNK1120: 8 unresolved externals

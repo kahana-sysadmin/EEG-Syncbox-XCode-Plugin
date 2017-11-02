@@ -1,26 +1,10 @@
-
 #if _MSC_VER // this is defined when compiling with Visual Studio
 #define EXPORT_API __declspec(dllexport) // Visual Studio needs annotating exported functions with this
 #else
 #define EXPORT_API // XCode does not need annotating exported functions, so define is empty
 #endif
 
-/*
-	This is a simple plugin, a bunch of functions that do simple things.
-*/
-
-//#include "Plugin.pch"
-#include "u3Extended.h"
-#include <cstdlib> //for random()
-//#include <unistd.h> //for usleep(microseconds)
-//#include <pthread.h>
-#include <exception>
-#include <chrono>
-
-#include "sys_time_extended.h"
-
-
-using namespace std::chrono;
+#include "Plugin.pch"
 
 HANDLE hDevice;
 bool isDeviceOpen = false;
@@ -33,8 +17,7 @@ int syncChannel = 0;
 bool isRandomSeedSet = false;
 float syncTimeBeforePulseSeconds = 0.0f;
 long long syncOnSystemTime = 0;
-// ------------------------------------------------------------------------
-// Plugin itself
+
 
 
 // Link following functions C-style (required for plugins)
@@ -48,31 +31,91 @@ extern "C"
 	}
 
 	int EXPORT_API PrintANumber() {
-		return 5;
+		return 6973;
 	}
 
 	int EXPORT_API AddTwoIntegers(int a, int b) {
 		return a + b;
-	} 
+	}
 
 	float EXPORT_API AddTwoFloats(float a, float b) {
 		return a + b;
 	}
+	HANDLE openUSB(int ID) {
+		libusb_device_handle *hDevice = NULL;
+
+		libusb_init(NULL);
+		hDevice = libusb_open_device_with_vid_pid(NULL, FTD_VENDOR_ID, FTD_PRODUCT_ID);
+		if (!hDevice)
+		{
+			fprintf(stderr, "Couldn't open ftd syncbox. \n");
+		}
+
+		if (hDevice && (libusb_kernel_driver_active(hDevice, 0) == 1))
+		{
+			if (libusb_detach_kernel_driver(hDevice, 0) != 0)
+			{
+				fprintf(stderr, "Couldn't unload the kernel driver for ftd syncbox");
+				hDevice = NULL;
+			}
+		}
+
+		if (hDevice)
+		{
+			if (libusb_claim_interface(hDevice, 0) < 0)
+			{
+				fprintf(stderr, "The FTD syncbox couldn't be claimed after opening. \n");
+				hDevice = NULL;
+			}
+		}
+
+		return (HANDLE)hDevice;
+	}
+
+	int returnStatus(HANDLE hDevice, int channel)
+	{
+		unsigned char d = 0;
+		int actual_bytes_transferred;
+		int syncStatus;
+		syncStatus = libusb_bulk_transfer((libusb_device_handle *)hDevice, (2 | LIBUSB_ENDPOINT_OUT), &d, sizeof(d), &actual_bytes_transferred, 0);
+		return syncStatus;
+	}
 
 
-	//extern "C" char* OpenUSB();
-	extern "C" HANDLE openUSB(int ID);
-	extern "C" int returnStatus(HANDLE hDevice, int channel);
-	extern "C" void sendPulse(HANDLE hDevice, int channel);
-	extern "C" void closeUSB(HANDLE hDevice);
+	void closeUSB(HANDLE hDevice) {
+		if (hDevice)
+		{
+			libusb_release_interface((libusb_device_handle *)hDevice, 0);
+			libusb_close((libusb_device_handle *)hDevice);
+		}
 
+	}
+
+	void sendPulse(HANDLE hDevice, int channel)
+	{
+		if (hDevice)
+		{
+			int error_code;
+			unsigned char d = 0;
+			int actual_bytes_transferred;
+
+			error_code = libusb_bulk_transfer((libusb_device_handle *)hDevice, (2 | LIBUSB_ENDPOINT_OUT), &d, sizeof(d), &actual_bytes_transferred, 0);
+			if (error_code != 0)
+			{
+				fprintf(stderr, "Writing to the ftd device failed with error code %d . \n", error_code);
+			}
+		}
+	}
+
+
+	
 	const EXPORT_API char* OpenUSB()
 	{
 		int localID;
-	//open first ftd syncbox over USB
+		//open first ftd syncbox over USB
 		localID = -1;
 
-		hDevice = openUSB(localID);
+		//hDevice = openUSB(localID);
 		if (hDevice != NULL)
 		{
 			isDeviceOpen = true;
@@ -84,7 +127,7 @@ extern "C"
 			return "didn't open USB!";
 		}
 	}
-
+	/*
 	const EXPORT_API char* CloseUSB()
 	{
 		if (isDeviceOpen)
@@ -97,7 +140,7 @@ extern "C"
 		{
 			return "didn't close USB!";
 		}
-	
+
 	}
 
 	int EXPORT_API CheckUSB()
@@ -113,7 +156,7 @@ extern "C"
 		}
 
 	}
-
+	
 	const EXPORT_API char* TurnLEDOn()
 	{
 		if (isDeviceOpen)
@@ -123,7 +166,8 @@ extern "C"
 		}
 		return "No device to turn on LED. ";
 	}
-
+	*/
+	
 	const EXPORT_API char* TurnLEDOff()
 	{
 		if (isDeviceOpen)
@@ -132,6 +176,5 @@ extern "C"
 		}
 		return "no device to turn off";
 	}
-
 
 }
