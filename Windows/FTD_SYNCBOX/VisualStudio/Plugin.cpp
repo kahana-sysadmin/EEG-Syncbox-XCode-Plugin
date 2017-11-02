@@ -3,8 +3,11 @@
 #else
 #define EXPORT_API // XCode does not need annotating exported functions, so define is empty
 #endif
+#include <stdio.h>
+#include "libusb.h"
 
-#include "Plugin.pch"
+#define FTD_VENDOR_ID 0x0403
+#define FTD_PRODUCT_ID 0x6001
 
 HANDLE hDevice;
 bool isDeviceOpen = false;
@@ -31,7 +34,7 @@ extern "C"
 	}
 
 	int EXPORT_API PrintANumber() {
-		return 6973;
+		return 6977;
 	}
 
 	int EXPORT_API AddTwoIntegers(int a, int b) {
@@ -109,40 +112,40 @@ extern "C"
 
 
 	
-	const EXPORT_API char* OpenUSB()
+	EXPORT_API int OpenUSB()
 	{
 		int localID;
 		//open first ftd syncbox over USB
 		localID = -1;
 
-		//hDevice = openUSB(localID);
+		hDevice = openUSB(localID);
 		if (hDevice != NULL)
 		{
 			isDeviceOpen = true;
-			return "opened USB";
+			return 1;
 		}
 		else
 		{
 			isDeviceOpen = false;
-			return "didn't open USB!";
+			return 0;
 		}
 	}
-	/*
-	const EXPORT_API char* CloseUSB()
+	
+	EXPORT_API int CloseUSB()
 	{
 		if (isDeviceOpen)
 		{
 			isDeviceOpen = false;
 			closeUSB(hDevice);
-			return "closed USB device";
+			return 1;
 		}
 		else
 		{
-			return "didn't close USB!";
+			return 0;
 		}
 
 	}
-
+	
 	int EXPORT_API CheckUSB()
 	{
 		if (hDevice != NULL)
@@ -166,7 +169,7 @@ extern "C"
 		}
 		return "No device to turn on LED. ";
 	}
-	*/
+	
 	
 	const EXPORT_API char* TurnLEDOff()
 	{

@@ -170,6 +170,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>C:\myLibs\libusb-1.0.21\include\libusb.h</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <OutputFile>$(OutDir)ASimplePlugin.dll</OutputFile>
@@ -189,9 +190,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="libusb.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Plugin.pch" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
