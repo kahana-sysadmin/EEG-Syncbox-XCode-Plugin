@@ -58,7 +58,7 @@ void toggleHandleLEDOn(HANDLE hDevice, int channel){
     
     //Toggle FIO4
     printf("\nCalling eDO to toggle FIO4\n");
-    if((error = eDO(hDevice, 1, channel, !lngState)) != 0) //apparently setting the opposite lngState always turns it on? weird.
+    if((error = eDO(hDevice, 1, channel, 1)) != 0)
         goto end;
     
     end:
@@ -79,7 +79,7 @@ void toggleHandleLEDOff(HANDLE hDevice, int channel){
     
     //Toggle FIO4
     printf("\nCalling eDO to toggle FIO4\n");
-    if((error = eDO(hDevice, 1, channel, lngState)) != 0) //apparently keeping the same lngState turns it off. weird.
+    if((error = eDO(hDevice, 1, channel, 0)) != 0)
         goto end;
     
 end:
